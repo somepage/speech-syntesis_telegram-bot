@@ -36,7 +36,7 @@ def change_voice(bot, update):
 def change_emotion(bot, update):
     emotions_buttons = [[InlineKeyboardButton(text=em, callback_data=em) for em in emotions]]
     emotions_markup = InlineKeyboardMarkup(emotions_buttons)
-    bot.send_message(chat_id=update.message.chat_id, text="Choose a voice", reply_markup=emotions_markup)
+    bot.send_message(chat_id=update.message.chat_id, text="Choose a emotion", reply_markup=emotions_markup)
 
     return EMOTION
 

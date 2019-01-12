@@ -110,3 +110,4 @@ if __name__ == '__main__':
     dispatcher.add_handler(msg_handler)
 
     updater.start_polling()
+    updater.idle()

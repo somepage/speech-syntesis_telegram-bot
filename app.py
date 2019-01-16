@@ -135,6 +135,7 @@ if __name__ == '__main__':
     updater = Updater(token='TOKEN')
     folder_id = 'ID'
     oauth_token = 'OAUTH'
+    iam_token = speechkit.get_iam_token(oauth_token)
     dispatcher = updater.dispatcher
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         level=logging.INFO)

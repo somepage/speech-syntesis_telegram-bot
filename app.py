@@ -2,6 +2,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, Conversa
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 import logging
 import speechkit
+from io import BytesIO
 
 
 def start(bot, update):
@@ -126,6 +127,7 @@ def send_speech(bot, update, chat_data):
         iam_token = speechkit.get_iam_token(oauth_token)
         speech_request = speechkit.synthesize(text, iam_token, folder_id, lang=language, voice=voice, emotion=emotion)
 
+    bot.sendVoice(update.message.chat_id, BytesIO(speech_request.content))
 
 if __name__ == '__main__':
     updater = Updater(token='TOKEN')

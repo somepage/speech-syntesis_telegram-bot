@@ -29,7 +29,7 @@ def change_gender(bot, update):
 
 def change_voice(bot, update, chat_data):
     if chat_data.get(update.message.chat_id, 0):
-        gender_id = chat_data[1]
+        gender_id = chat_data[update.message.chat_id][1]
     else:
         gender_id = gender_default
 
@@ -167,7 +167,11 @@ if __name__ == '__main__':
             VOICE: [CallbackQueryHandler(callback_voice, pass_chat_data=True)],
             EMOTION: [CallbackQueryHandler(callback_emotion, pass_chat_data=True)],
         },
-        fallbacks=[]
+        fallbacks=[
+            CommandHandler('change_language', change_language,),
+            CommandHandler('change_gender', change_gender),
+            CommandHandler('change_voice', change_voice, pass_chat_data=True),
+            CommandHandler('change_emotion', change_emotion)],
     )
     msg_handler = MessageHandler(Filters.text, send_speech, pass_chat_data=True)
 

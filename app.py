@@ -19,6 +19,7 @@ def change_language(bot, update):
 
 
 def change_gender(bot, update):
+
     genders_buttons = [[InlineKeyboardButton(text=gen, callback_data=gen) for gen in genders]]
     genders_markup = InlineKeyboardMarkup(genders_buttons)
     bot.send_message(chat_id=update.message.chat_id, text="Choose a gender", reply_markup=genders_markup)
@@ -168,7 +169,7 @@ if __name__ == '__main__':
         },
         fallbacks=[]
     )
-    msg_handler = MessageHandler(Filters.text, send_speech)
+    msg_handler = MessageHandler(Filters.text, send_speech, pass_chat_data=True)
 
     dispatcher.add_handler(conv_handler)
     dispatcher.add_handler(msg_handler)

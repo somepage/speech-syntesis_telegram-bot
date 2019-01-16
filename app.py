@@ -1,5 +1,5 @@
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, ConversationHandler, MessageHandler, Filters
-from telegram import InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ChatAction
 import logging
 import speechkit
 from io import BytesIO
@@ -108,6 +108,7 @@ def callback_emotion(bot, update, chat_data):
 
 
 def send_speech(bot, update, chat_data):
+    bot.send_chat_action(chat_id=update.effective_message.chat_id, action=ChatAction.RECORD_AUDIO)
     text = update.message.text
 
     if chat_data.get(update.message.chat_id, 0):
@@ -128,6 +129,7 @@ def send_speech(bot, update, chat_data):
         speech_request = speechkit.synthesize(text, iam_token, folder_id, lang=language, voice=voice, emotion=emotion)
 
     bot.sendVoice(update.message.chat_id, BytesIO(speech_request.content))
+
 
 if __name__ == '__main__':
     updater = Updater(token='TOKEN')

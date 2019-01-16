@@ -72,7 +72,7 @@ def callback_gender(bot, update, chat_data):
         chat_data[query.message.chat_id] = [
             language_default,
             query.data,
-            voice_default,
+            voices[query.data][0],
             emotion_default
         ]
     bot.answer_callback_query(update.callback_query.id, text="Gender successfully changed")
@@ -175,6 +175,7 @@ if __name__ == '__main__':
     )
     msg_handler = MessageHandler(Filters.text, send_speech, pass_chat_data=True)
 
+    dispatcher.add_handler(start_handler)
     dispatcher.add_handler(conv_handler)
     dispatcher.add_handler(msg_handler)
 

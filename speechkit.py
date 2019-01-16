@@ -36,4 +36,4 @@ def synthesize(text, iam_token, folder_id, lang='ru-RU', voice='oksana', emotion
         stream=True
     )
 
-    return r.content
+    return r

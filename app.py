@@ -1,10 +1,11 @@
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, ConversationHandler, MessageHandler, Filters
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 import logging
+import speechkit
 
 
 def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="Enter a text for transform text-to-speech, send /help for "
+    bot.send_message(chat_id=update.message.chat_id, text="Enter a text for transform text-to-speech, send / for "
                                                           "more")
 
 
@@ -106,19 +107,33 @@ def callback_emotion(bot, update, chat_data):
 
 
 def send_speech(bot, update, chat_data):
-    pass
+    text = update.message.text
+
+    if chat_data.get(update.message.chat_id, 0):
+        language = languages[chat_data[update.message.chat_id][LANG]]
+        voice = chat_data[update.message.chat_id][VOICE].lower()
+        emotion = chat_data[update.message.chat_id][EMOTION].lower()
+    else:
+        language = languages[language_default]
+        voice = voice_default.lower()
+        emotion = emotion_default.lower()
+
+    global iam_token
+    global folder_id
+    speech_request = speechkit.synthesize(text, iam_token, folder_id, lang=language, voice=voice, emotion=emotion)
+
+    if speech_request.status_code == 400:
+        iam_token = speechkit.get_iam_token(oauth_token)
+        speech_request = speechkit.synthesize(text, iam_token, folder_id, lang=language, voice=voice, emotion=emotion)
 
 
 if __name__ == '__main__':
     updater = Updater(token='TOKEN')
+    folder_id = 'ID'
+    oauth_token = 'OAUTH'
     dispatcher = updater.dispatcher
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         level=logging.INFO)
-
-    language = {}
-    gender = {}
-    voice = {}
-    emotion = {}
 
     language_default = 'Russian'
     gender_default = 'Female'

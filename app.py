@@ -125,7 +125,7 @@ def send_speech(bot, update, chat_data):
     global folder_id
     speech_request = speechkit.synthesize(text, iam_token, folder_id, lang=language, voice=voice, emotion=emotion)
 
-    if speech_request.status_code == 400:
+    if speech_request.status_code == 401:
         iam_token = speechkit.get_iam_token(oauth_token)
         speech_request = speechkit.synthesize(text, iam_token, folder_id, lang=language, voice=voice, emotion=emotion)
 

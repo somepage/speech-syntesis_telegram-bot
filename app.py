@@ -1,5 +1,6 @@
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, ConversationHandler, MessageHandler, Filters
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ChatAction
+from telegram.ext.dispatcher import run_async
 import logging
 import speechkit
 from io import BytesIO
@@ -19,7 +20,6 @@ def change_language(bot, update):
 
 
 def change_gender(bot, update):
-
     genders_buttons = [[InlineKeyboardButton(text=gen, callback_data=gen) for gen in genders]]
     genders_markup = InlineKeyboardMarkup(genders_buttons)
     bot.send_message(chat_id=update.message.chat_id, text="Choose a gender", reply_markup=genders_markup)
@@ -108,6 +108,7 @@ def callback_emotion(bot, update, chat_data):
     bot.answer_callback_query(update.callback_query.id, text="Emotion successfully changed")
 
 
+@run_async
 def send_speech(bot, update, chat_data):
     bot.send_chat_action(chat_id=update.effective_message.chat_id, action=ChatAction.RECORD_AUDIO)
     text = update.message.text
@@ -168,7 +169,7 @@ if __name__ == '__main__':
             EMOTION: [CallbackQueryHandler(callback_emotion, pass_chat_data=True)],
         },
         fallbacks=[
-            CommandHandler('change_language', change_language,),
+            CommandHandler('change_language', change_language, ),
             CommandHandler('change_gender', change_gender),
             CommandHandler('change_voice', change_voice, pass_chat_data=True),
             CommandHandler('change_emotion', change_emotion)],
